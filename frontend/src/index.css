@@ -1,0 +1,331 @@
+@import "tailwindcss";
+
+:root {
+  --bg-0: #080808;
+  --bg-1: #111111;
+  --bg-2: #1a1a1a;
+  --panel: rgba(10, 10, 10, 0.96);
+  --panel-strong: rgba(4, 4, 4, 0.99);
+  --line: rgba(80, 80, 80, 0.35);
+  --line-strong: rgba(200, 200, 200, 0.25);
+  --text-0: #e0e0e0;
+  --text-1: #999999;
+  --text-2: #606060;
+  --mono: "Cascadia Mono", "IBM Plex Mono", "Lucida Console", Consolas, monospace;
+  --display: "Bahnschrift SemiCondensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --terminal-bg: #060606;
+  --terminal-line: rgba(140, 140, 140, 0.28);
+  --terminal-text: #c8c8c8;
+  --text-scale: 1;
+  color: var(--text-0);
+  background: var(--bg-0);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  font-size: calc(16px * var(--text-scale));
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--mono);
+  background: linear-gradient(180deg, #0d0d0d 0%, #080808 50%, #050505 100%);
+  color: var(--text-0);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(transparent 0%, rgba(255, 255, 255, 0.015) 50%, transparent 100%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018) 0,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  opacity: 0.2;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.room-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 24%, rgba(0, 0, 0, 0.42) 82%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.52), transparent 12%, transparent 88%, rgba(0, 0, 0, 0.52));
+}
+
+.rain-pane {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(transparent 0%, rgba(255, 255, 255, 0.01) 100%),
+    repeating-linear-gradient(
+      110deg,
+      transparent 0 10px,
+      rgba(200, 200, 200, 0.06) 11px 12px,
+      transparent 13px 24px
+    );
+  opacity: 0.18;
+  animation: rainShift 10s linear infinite;
+  pointer-events: none;
+}
+
+.crt-grid {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.018) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.panel-frame {
+  position: relative;
+  border: 1px solid #252525;
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(14, 14, 14, 0.98), rgba(8, 8, 8, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    inset 0 0 0 2px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+.panel-frame::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(55, 55, 55, 0.28);
+  pointer-events: none;
+}
+
+.panel-label {
+  font-family: var(--display);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.terminal-text {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.signal-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.world-bar {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(55, 55, 55, 0.9);
+  border-radius: 0;
+  background: rgba(10, 10, 10, 0.88);
+}
+
+.world-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(210, 210, 210, 0.85) 0 10px,
+      rgba(140, 140, 140, 0.95) 10px 12px
+    );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.noise-burst {
+  animation: screenPulse 5.4s infinite steps(1);
+}
+
+.ticker-track {
+  animation: tickerScroll 30s linear infinite;
+  white-space: nowrap;
+}
+
+.toast-shell {
+  border: 1px solid rgba(140, 140, 140, 0.28);
+  background: rgba(8, 8, 8, 0.96) !important;
+  color: var(--text-0) !important;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.equipment-title {
+  font-family: var(--display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pixel-frame {
+  border: 1px solid rgba(48, 48, 48, 0.92);
+  border-radius: 0;
+  background: rgba(8, 8, 8, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    inset 0 0 0 2px rgba(0, 0, 0, 0.45);
+}
+
+.terminal-window {
+  position: relative;
+  border: 1px solid var(--terminal-line);
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.98), rgba(5, 5, 5, 0.98));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.terminal-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(transparent 0%, rgba(255, 255, 255, 0.008) 50%, transparent 100%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.016) 0 1px,
+      transparent 1px 3px
+    );
+  mix-blend-mode: screen;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.terminal-copy {
+  color: var(--terminal-text);
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.06);
+}
+
+.terminal-block {
+  border: 1px solid rgba(48, 48, 48, 0.9);
+  border-radius: 0;
+  background: rgba(6, 6, 6, 0.78);
+}
+
+.terminal-header-strip {
+  border-bottom: 1px solid rgba(42, 42, 42, 0.9);
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.95), rgba(10, 10, 10, 0.95));
+}
+
+.pixel-input,
+.pixel-textarea {
+  border: 1px solid rgba(58, 58, 58, 0.95);
+  border-radius: 0;
+  background: rgba(6, 6, 6, 0.96);
+  color: var(--terminal-text);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+
+.pixel-input:focus,
+.pixel-textarea:focus {
+  border-color: rgba(200, 200, 200, 0.5);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.pixel-button {
+  border: 1px solid rgba(58, 58, 58, 0.95);
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.98), rgba(8, 8, 8, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.pixel-button:hover {
+  background: linear-gradient(180deg, rgba(26, 26, 26, 0.98), rgba(12, 12, 12, 0.98));
+  border-color: rgba(90, 90, 90, 0.9);
+}
+
+.pixel-button:active {
+  transform: translateY(1px);
+}
+
+/* ghost-scrollbar: panels remain scrollable but no visible scrollbar track */
+
+@keyframes rainShift {
+  from {
+    transform: translateX(0) translateY(-3%);
+  }
+
+  to {
+    transform: translateX(-4%) translateY(3%);
+  }
+}
+
+@keyframes screenPulse {
+  0%,
+  92%,
+  100% {
+    opacity: 1;
+  }
+
+  93% {
+    opacity: 0.92;
+  }
+
+  95% {
+    opacity: 0.84;
+  }
+
+  97% {
+    opacity: 0.98;
+  }
+}
+
+@keyframes tickerScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
